@@ -68,7 +68,7 @@ function addNote(text) {
 	element.appendChild(text_element)
 	let remove_button = document.createElement("button");
 	remove_button.onclick = function() {
-		chrome.storage.local.get("notes", function(result) {
+		browser.storage.local.get("notes").then(function(result) {
 			let notes = [], found = false;
 			for (let x of result["notes"]) {
 				if (found) {
@@ -80,7 +80,7 @@ function addNote(text) {
 				};
 				notes.push(x);
 			};
-			chrome.storage.local.set({"notes": notes}, function() {
+			browser.storage.local.set({"notes": notes}).then(function() {
 				this.parentNode.remove();
 				if (!document.getElementById("notes-entries").children.length) {
 					document.getElementById("notes-empty").style.display = "block";
@@ -92,9 +92,9 @@ function addNote(text) {
 	document.getElementById("notes-entries").appendChild(element);
 };
 
-chrome.storage.local.get("notes", function(result) {
+browser.storage.local.get("notes").then(function(result) {
 	if (!Object.entries(result).length) {
-		chrome.storage.local.set({"notes": ""})
+		browser.storage.local.set({"notes": ""})
 		document.getElementById("notes-empty").style.display = "block";
 	} else {
 		for (let x of result["notes"]) {
@@ -109,27 +109,15 @@ chrome.storage.local.get("notes", function(result) {
 document.getElementById("notes-input").onkeydown = function(event) {
 	if (event.key == "Enter") {
 		document.getElementById("notes-empty").style.display = "none";
-		chrome.storage.local.get("notes", function(result) {
+		browser.storage.local.get("notes").then(function(result) {
 			let notes = result["notes"];
 			notes.push(document.getElementById("notes-input").value);
 			addNote(document.getElementById("notes-input").value)
-			chrome.storage.local.set({"notes": notes}, function() {
+			browser.storage.local.set({"notes": notes}).then(function() {
 				document.getElementById("notes-input").value = "";
 			});
 		});
 	};
-};
-
-var dict_word = "";
-
-document.getElementById("dict-input").onkeydown = function(event) {
-	if (event.key == "Enter") {
-		//
-	};
-};
-
-function loadDictWord() {
-	console.log(dict_word)
 };
 
 function toggleTemperatureUnit() {
