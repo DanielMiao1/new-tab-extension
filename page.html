@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>New Tab</title>
+		<style media="screen">
+			@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Righteous&family=Roboto:wght@400&family=Staatliches&display=swap');
+
+			body {
+				text-align: center;
+				background-attachment: fixed;
+			}
+
+			.site {
+				padding: 1.2vmax;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-color: transparent;
+				border: none;
+				transition: 0.2s;
+			}
+
+			.site:hover,
+			.site:focus {
+				cursor: pointer;
+				background-color: rgba(0, 0, 0, 0.1);
+				transition: 0.2s;
+			}
+
+			.site:focus-visible {
+				outline: 1px solid black;
+				outline-offset: 1.5px;
+			}
+
+			#sites {
+				top: 50%;
+				position: absolute;
+				margin-left: 50%;
+			}
+
+			.title {
+				position: absolute;
+				z-index: -1;
+				text-align: center;
+			}
+			
+			#grid {
+				text-align: left;
+				position: absolute;
+				left: 20px;
+				top: 20px;
+				display: flex;
+				align-items: flex-start;
+				grid-gap: 20px;
+			}
+			
+			#grid > div {
+				background: rgba(255, 255, 255, 0.3);
+				border-radius: 5px;
+				padding: 15px;
+			}
+			
+			#grid > div * {
+				margin: 0;
+			}
+			
+			#time {
+				font-size: 85px;
+				font-family: "Righteous", sans-serif;
+			}
+			
+			#time-second {
+				font-size: 30px;
+				margin-left: -5px;
+			}
+			
+			#date {
+				font-size: 20px;
+				font-family: "Audiowide", sans-serif;
+			}
+			
+			#weather * {
+				font-family: "Staatliches", sans-serif;
+			}
+			
+			#weather-icon {
+				width: 100px;
+				height: 100px;
+				margin: auto !important;
+				background-size: 100px;
+				background-repeat: no-repeat;
+			}
+			
+			#weather-temperature,
+			#weather-temperature-unit {
+				font-size: 50px;
+				display: inline;
+			}
+			
+			#weather-temperature-min,
+			#weather-temperature-max,
+			#weather-temperature-min-unit,
+			#weather-temperature-max-unit {
+				display: inline;
+				font-size: 15px;
+			}
+			
+			#weather-temperature-min-unit::after {
+				content: " –";
+			}
+			
+			#weather-temperature-unit {
+				cursor: pointer;
+				transition: 300ms;
+				padding-right: 10px;
+			}
+			
+			#weather-temperature-unit:hover {
+				color: #666;
+			}
+			
+			#weather-humidity,
+			#weather-wind-speed,
+			#weather-wind-speed-unit {
+				font-size: 20px;
+			}
+			
+			#weather-humidity::before {
+				content: "Humidity: ";
+			}
+			
+			#weather-humidity::after {
+				content: "%";
+			}
+			
+			#weather-wind-speed {
+				display: inline;
+			}
+			
+			#weather-wind-speed::before {
+				content: "Wind Speed: ";
+			}
+			
+			#weather-wind-speed-unit {
+				content: " meter/s";
+				cursor: pointer;
+				transition: 300ms;
+				padding-right: 10px;
+				display: inline;
+			}
+			
+			#weather-wind-speed-unit:hover {
+				color: #666;
+			}
+			
+			#notes-input {
+				width: calc(100% - 7.5px);
+				border: none;
+				background: rgba(255, 255, 255, 0.7);
+				outline: none;
+				padding: 4px;
+			}
+			
+			#notes-empty {
+				margin-top: 10px !important;
+				display: none;
+				font-family: "Roboto", sans-serif;
+				font-style: italic;
+				font-size: 14px;
+			}
+			
+			.note {
+				font-family: "Roboto", sans-serif;
+				display: flex;
+				align-items: center;
+				font-size: 14px;
+				transition: 300ms;
+				height: 25px;
+				text-indent: 4px;
+			}
+			
+			.note:hover {
+				background: rgba(255, 255, 255, 0.4);
+			}
+			
+			.note > p {
+				width: calc(100% - 25px);
+				overflow-x: auto;
+			}
+			
+			.note > p::-webkit-scrollbar {
+				background: transparent;
+				height: 3px;
+			}
+			
+			.note > p:hover::-webkit-scrollbar-thumb {
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+			
+			.note > button {
+				padding: 0;
+				right: 15px;
+				height: 25px;
+				width: 25px;
+				border: none;
+				background: transparent;
+			}
+			
+			.note > button:hover {
+				background: rgba(255, 255, 255, 0.5)
+			}
+			
+			.note > button::after {
+				content: "×";
+			}
+		</style>
+	</head>
+	<body>
+		<div id="grid">
+			<div id="datetime">
+				<p id="time">
+					<span id="time-hour-minute"></span>
+					<span id="time-second"></span>
+				</p>
+				<p id="date">
+					<span id="time-weekday"></span>
+					<span id="time-month"></span>
+					<span id="time-day"></span>
+					<span id="time-year"></span>
+				</p>
+			</div>
+			<div id="weather">
+				<p id="weather-icon"></p>
+				<p id="weather-temperature">...</p>
+				<p id="weather-temperature-unit">°C</p>
+				<p id="weather-temperature-min"></p>
+				<p id="weather-temperature-min-unit">°C</p>
+				<p id="weather-temperature-max"></p>
+				<p id="weather-temperature-max-unit">°C</p>
+				<p id="weather-humidity"></p>
+				<p id="weather-wind-speed"></p>
+				<p id="weather-wind-speed-unit">meter/s</p>
+			</div>
+			<div id="notes">
+				<input id="notes-input">
+				<div id="notes-entries"></div>
+				<div id="notes-empty">No notes</div>
+			</div>
+			<div id="dict">
+				<input id="dict-input">
+				<p id="dict-invalid">No results</p>
+			</div>
+		</div>
+		<div id="sites">
+			<button data-name="Google" data-url="https://www.google.com/" class="site"></button>
+		</div>
+		<script type="text/javascript" src="script.js"></script>
+	</body>
+</html>
